@@ -42,7 +42,7 @@ export function calculateScore(correct: number, total: number): GameScore {
 export function buildShareText(score: GameScore, url: string): string {
   return [
     '\u{1F1F0}\u{1F1F7} You Think This Is Easy?',
-    'WBC 2026 심판 챌린지',
+    'WBC 2026 타자 챌린지',
     `내 점수: ${score.correct}/${score.total} (${score.percentage}점) ${score.gradeEmoji}`,
     '',
     `나도 도전하기 \u2192 ${url}`,
