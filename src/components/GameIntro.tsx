@@ -1,8 +1,12 @@
+import { useState } from 'react';
+
 interface GameIntroProps {
-  onStart: () => void;
+  onStart: (batSide: 'L' | 'R', fastballOnly: boolean) => void;
 }
 
 export default function GameIntro({ onStart }: GameIntroProps) {
+  const [fastballOnly, setFastballOnly] = useState(false);
+
   return (
     <div className="flex flex-col items-center justify-center h-full px-6 text-center bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
       <div className="max-w-md">
@@ -26,12 +30,32 @@ export default function GameIntro({ onStart }: GameIntroProps) {
           </p>
         </div>
 
-        <button
-          onClick={onStart}
-          className="px-10 py-4 bg-red-600 hover:bg-red-500 text-white text-xl font-bold rounded-full transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-red-600/30"
-        >
-          도전 시작!
-        </button>
+        <label className="flex items-center justify-center gap-2 mb-6 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={fastballOnly}
+            onChange={(e) => setFastballOnly(e.target.checked)}
+            className="w-4 h-4 accent-orange-500 rounded"
+          />
+          <span className="text-sm font-bold text-orange-400">강속구 모드</span>
+          <span className="text-xs text-slate-500">(93mph+ 만)</span>
+        </label>
+
+        <p className="text-sm text-slate-400 mb-4">어느 타석에서 볼까요?</p>
+        <div className="flex gap-4 justify-center">
+          <button
+            onClick={() => onStart('L', fastballOnly)}
+            className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white text-lg font-bold rounded-full transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-blue-600/30"
+          >
+            좌타 시점
+          </button>
+          <button
+            onClick={() => onStart('R', fastballOnly)}
+            className="px-8 py-4 bg-red-600 hover:bg-red-500 text-white text-lg font-bold rounded-full transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-red-600/30"
+          >
+            우타 시점
+          </button>
+        </div>
 
         <p className="mt-6 text-xs text-slate-500">
           KOR vs CZE, JPN, TPE | 실제 Statcast 궤적 재현

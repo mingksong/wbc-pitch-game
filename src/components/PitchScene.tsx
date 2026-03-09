@@ -41,7 +41,7 @@ export default function PitchScene({ pitch, isAnimating, onAnimationComplete }: 
         frameloop={isAnimating ? 'always' : 'demand'}
         gl={{ antialias: true, alpha: false }}
         dpr={[1, 2]}
-        camera={{ fov: 55, near: 0.1, far: 300 }}
+        camera={{ fov: 38, near: 0.1, far: 300 }}
       >
         <CameraController batSide={pitch.batSide} />
 

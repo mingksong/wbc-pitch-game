@@ -37,7 +37,7 @@ function PitcherMound() {
       {/* Mound dirt */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.2, 0]}>
         <circleGeometry args={[5, 32]} />
-        <meshStandardMaterial color="#8B6914" roughness={0.9} />
+        <meshStandardMaterial color="#D4A574" roughness={0.9} />
       </mesh>
       {/* Rubber */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.35, 0]}>
@@ -101,8 +101,8 @@ function BothBatterBoxes({ batSide }: { batSide: 'L' | 'R' }) {
   const lhbX = 2.0;
   return (
     <>
-      <BatterBoxLines xOffset={rhbX} opacity={batSide === 'R' ? 0.5 : 0.15} />
-      <BatterBoxLines xOffset={lhbX} opacity={batSide === 'L' ? 0.5 : 0.15} />
+      <BatterBoxLines xOffset={rhbX} opacity={batSide === 'R' ? 0.85 : 0.25} />
+      <BatterBoxLines xOffset={lhbX} opacity={batSide === 'L' ? 0.85 : 0.25} />
     </>
   );
 }
@@ -130,7 +130,7 @@ function FoulLines() {
 
     const geo1 = new THREE.BufferGeometry().setFromPoints(firstBase);
     const geo3 = new THREE.BufferGeometry().setFromPoints(thirdBase);
-    const mat = new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.35 });
+    const mat = new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.75 });
 
     return { geo1, geo3, mat };
   }, []);
@@ -202,7 +202,7 @@ function CatcherArea() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 1]}>
       <shapeGeometry args={[shape]} />
-      <meshStandardMaterial color="#9B7B3C" roughness={0.95} />
+      <meshStandardMaterial color="#D4A574" roughness={0.95} />
     </mesh>
   );
 }
@@ -224,7 +224,7 @@ function InfieldDirt() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>
       <shapeGeometry args={[shape]} />
-      <meshStandardMaterial color="#8B6914" roughness={1} />
+      <meshStandardMaterial color="#D4A574" roughness={1} />
     </mesh>
   );
 }
@@ -234,7 +234,7 @@ function OutfieldGrass() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.03, -90]}>
       <planeGeometry args={[300, 200]} />
-      <meshStandardMaterial color="#1a5c1a" roughness={1} />
+      <meshStandardMaterial color="#3da63d" roughness={0.85} />
     </mesh>
   );
 }
@@ -253,7 +253,7 @@ function InfieldGrass() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.005, -15]}>
       <shapeGeometry args={[shape]} />
-      <meshStandardMaterial color="#2d7a2d" roughness={0.9} />
+      <meshStandardMaterial color="#5CBF60" roughness={0.85} />
     </mesh>
   );
 }
@@ -292,14 +292,14 @@ export default function BatterBox({ szTop, szBot, batSide }: BatterBoxProps) {
       <BothBatterBoxes batSide={batSide} />
 
       {/* Ambient light - night game feel */}
-      <ambientLight intensity={0.3} color="#b0c4de" />
+      <ambientLight intensity={0.7} color="#b0c4de" />
 
       {/* Main stadium lights */}
       <spotLight
         position={[0, 80, -30]}
         angle={0.5}
         penumbra={0.5}
-        intensity={2}
+        intensity={5}
         color="#fffaf0"
         castShadow={false}
       />
@@ -307,21 +307,21 @@ export default function BatterBox({ szTop, szBot, batSide }: BatterBoxProps) {
         position={[-40, 60, 0]}
         angle={0.6}
         penumbra={0.8}
-        intensity={0.8}
+        intensity={2.5}
         color="#fffaf0"
       />
       <spotLight
         position={[40, 60, 0]}
         angle={0.6}
         penumbra={0.8}
-        intensity={0.8}
+        intensity={2.5}
         color="#fffaf0"
       />
 
-      {/* Sky dome - dark gradient */}
+      {/* Sky dome - night sky blue */}
       <mesh>
         <sphereGeometry args={[200, 32, 32]} />
-        <meshBasicMaterial color="#0a0e1a" side={THREE.BackSide} />
+        <meshBasicMaterial color="#1e2d52" side={THREE.BackSide} />
       </mesh>
     </group>
   );

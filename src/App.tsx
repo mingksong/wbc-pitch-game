@@ -46,12 +46,18 @@ export default function App() {
   const [correctCount, setCorrectCount] = useState(0);
   const [lastCall, setLastCall] = useState<'strike' | 'ball' | null>(null);
   const [lastCorrect, setLastCorrect] = useState(false);
+  const [, setBatSide] = useState<'L' | 'R'>('R');
+  const [callHistory, setCallHistory] = useState<Array<{pitch: StrikeoutPitch, userCall: 'strike' | 'ball', correct: boolean}>>([]);
 
   const currentPitch = pitches[currentIndex] ?? null;
 
-  const startGame = useCallback(() => {
-    const selected = selectRandomPitches(pitchData, TOTAL_PITCHES);
+  const startGame = useCallback((side: 'L' | 'R', fastballOnly = false) => {
+    setBatSide(side);
+    let filtered = pitchData.filter(p => p.batSide === side);
+    if (fastballOnly) filtered = filtered.filter(p => p.startSpeed >= 93);
+    const selected = selectRandomPitches(filtered, TOTAL_PITCHES);
     setPitches(selected);
+    setCallHistory([]);
     setCurrentIndex(0);
     setCorrectCount(0);
     setLastCall(null);
@@ -72,6 +78,7 @@ export default function App() {
     setLastCall(call);
     setLastCorrect(correct);
     if (correct) setCorrectCount(prev => prev + 1);
+    setCallHistory(prev => [...prev, { pitch: currentPitch, userCall: call, correct }]);
     setPhase('result');
   }, [currentPitch]);
 
@@ -95,7 +102,14 @@ export default function App() {
   }
 
   if (phase === 'final') {
-    return <GameResult score={finalScore} onRestart={startGame} />;
+    return (
+      <GameResult
+        score={finalScore}
+        pitches={pitches}
+        callHistory={callHistory}
+        onRestart={() => setPhase('intro')}
+      />
+    );
   }
 
   if (!currentPitch) return null;
