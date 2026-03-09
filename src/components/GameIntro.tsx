@@ -13,7 +13,7 @@ export default function GameIntro({ onStart }: GameIntroProps) {
         <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-transparent">
           You Think This Is Easy?
         </h1>
-        <p className="text-lg text-slate-300 mb-8">WBC 2026 심판 챌린지</p>
+        <p className="text-lg text-slate-300 mb-8">WBC 2026 타자 챌린지</p>
 
         <div className="bg-slate-800/60 rounded-xl p-6 mb-8 text-left space-y-3">
           <p className="text-sm text-slate-300">
