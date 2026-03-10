@@ -1,4 +1,4 @@
-import type { StrikeoutPitch } from '../data/korStrikeoutPitches';
+import type { StrikeoutPitch } from '../data/types';
 import { getPitchColor, getPitchNameKo } from '../utils/pitchColors';
 
 interface PitchResultProps {

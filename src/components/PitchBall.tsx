@@ -1,7 +1,7 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import type { StrikeoutPitch } from '../data/korStrikeoutPitches';
+import type { StrikeoutPitch } from '../data/types';
 import { buildTrajectoryCurve } from '../utils/trajectory';
 import { getPitchColor } from '../utils/pitchColors';
 

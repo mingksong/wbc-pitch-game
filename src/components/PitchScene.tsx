@@ -1,7 +1,7 @@
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { useMemo, useEffect } from 'react';
 import * as THREE from 'three';
-import type { StrikeoutPitch } from '../data/korStrikeoutPitches';
+import type { StrikeoutPitch } from '../data/types';
 import BatterBox from './BatterBox';
 import PitchBall from './PitchBall';
 

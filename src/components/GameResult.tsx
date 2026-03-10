@@ -1,19 +1,27 @@
 import { useCallback } from 'react';
 import type { GameScore } from '../utils/scoring';
 import { buildShareText } from '../utils/scoring';
-import type { StrikeoutPitch } from '../data/korStrikeoutPitches';
+import type { StrikeoutPitch } from '../data/types';
+import type { GameMode } from '../data/types';
 
 interface GameResultProps {
   score: GameScore;
   pitches: StrikeoutPitch[];
   callHistory: Array<{pitch: StrikeoutPitch, userCall: 'strike' | 'ball', correct: boolean}>;
+  gameMode: GameMode;
   onRestart: () => void;
 }
 
 const SHARE_URL = 'https://wbc-pitch-game.vercel.app';
 
-export default function GameResult({ score, pitches: _pitches, callHistory, onRestart }: GameResultProps) {
-  const shareText = buildShareText(score, SHARE_URL);
+const MODE_FOOTER: Record<GameMode, string> = {
+  wbc: 'WBC 2026 한국 대표팀 실제 Statcast 데이터 기반',
+  skubal: 'Tarik Skubal 2024 시즌 Statcast 보더라인 피치 기반',
+  skenes: 'Paul Skenes 2024-25 시즌 Statcast 보더라인 피치 기반',
+};
+
+export default function GameResult({ score, pitches: _pitches, callHistory, gameMode, onRestart }: GameResultProps) {
+  const shareText = buildShareText(score, SHARE_URL, gameMode);
 
   const handleShare = useCallback(async () => {
     if (navigator.share) {
@@ -61,6 +69,9 @@ export default function GameResult({ score, pitches: _pitches, callHistory, onRe
           </div>
           <div className="text-lg text-yellow-400 font-bold">{score.percentage}점</div>
           <div className="text-sm text-slate-400 mt-1">{score.grade}</div>
+          {gameMode !== 'wbc' && (
+            <div className="text-xs text-amber-400/80 mt-2">보더라인 극한모드</div>
+          )}
         </div>
 
         <div className="space-y-3">
@@ -69,7 +80,7 @@ export default function GameResult({ score, pitches: _pitches, callHistory, onRe
               onClick={handleTwitter}
               className="py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-colors text-sm"
             >
-              𝕏 Twitter
+              {'\uD835\uDD4F'} Twitter
             </button>
             <button
               onClick={handleThreads}
@@ -87,7 +98,7 @@ export default function GameResult({ score, pitches: _pitches, callHistory, onRe
               onClick={handleShare}
               className="py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-colors text-sm"
             >
-              📋 복사
+              {'\uD83D\uDCCB'} 복사
             </button>
           </div>
           <button
@@ -106,7 +117,7 @@ export default function GameResult({ score, pitches: _pitches, callHistory, onRe
               <thead>
                 <tr className="text-slate-400 border-b border-slate-700">
                   <th className="py-1 pr-2 text-left">#</th>
-                  <th className="py-1 pr-2 text-left">경기</th>
+                  <th className="py-1 pr-2 text-left">{gameMode === 'wbc' ? '경기' : '시즌'}</th>
                   <th className="py-1 pr-2 text-left">투수</th>
                   <th className="py-1 pr-2 text-left">타자</th>
                   <th className="py-1 pr-2 text-left">구종</th>
@@ -130,7 +141,7 @@ export default function GameResult({ score, pitches: _pitches, callHistory, onRe
                       </span>
                     </td>
                     <td className="py-1.5 text-center">
-                      {entry.correct ? '✅' : '❌'}
+                      {entry.correct ? '\u2705' : '\u274C'}
                     </td>
                   </tr>
                 ))}
@@ -140,7 +151,7 @@ export default function GameResult({ score, pitches: _pitches, callHistory, onRe
         </div>
 
         <p className="mt-6 text-xs text-slate-500">
-          WBC 2026 한국 대표팀 실제 Statcast 데이터 기반
+          {MODE_FOOTER[gameMode]}
         </p>
       </div>
     </div>

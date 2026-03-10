@@ -1,3 +1,5 @@
+import type { GameMode } from '../data/types';
+
 export interface GameScore {
   correct: number;
   total: number;
@@ -39,10 +41,18 @@ export function calculateScore(correct: number, total: number): GameScore {
   return { correct, total, percentage, grade, gradeEmoji, message };
 }
 
-export function buildShareText(score: GameScore, url: string): string {
+const MODE_LABELS: Record<GameMode, string> = {
+  wbc: 'WBC 2026 타자 챌린지',
+  skubal: 'Tarik Skubal 보더라인 챌린지',
+  skenes: 'Paul Skenes 보더라인 챌린지',
+};
+
+export function buildShareText(score: GameScore, url: string, mode: GameMode = 'wbc'): string {
+  const modeLabel = MODE_LABELS[mode];
+  const borderlineTag = mode !== 'wbc' ? ' [보더라인 극한모드]' : '';
+
   return [
-    '\u{1F1F0}\u{1F1F7} You Think This Is Easy?',
-    'WBC 2026 타자 챌린지',
+    `\u{26BE} ${modeLabel}${borderlineTag}`,
     `내 점수: ${score.correct}/${score.total} (${score.percentage}점) ${score.gradeEmoji}`,
     '',
     `나도 도전하기 \u2192 ${url}`,

@@ -1,6 +1,9 @@
 import { useState, useCallback, useMemo } from 'react';
-import { pitchData } from './data/korStrikeoutPitches';
-import type { StrikeoutPitch } from './data/korStrikeoutPitches';
+import { pitchData as wbcPitches } from './data/korStrikeoutPitches';
+import { pitchData as skubalPitches } from './data/skubalPitches';
+import { pitchData as skenesPitches } from './data/skenesPitches';
+import type { StrikeoutPitch } from './data/types';
+import type { GameMode } from './data/types';
 import { calculateScore } from './utils/scoring';
 import GameIntro from './components/GameIntro';
 import PitchScene from './components/PitchScene';
@@ -47,14 +50,27 @@ export default function App() {
   const [lastCall, setLastCall] = useState<'strike' | 'ball' | null>(null);
   const [lastCorrect, setLastCorrect] = useState(false);
   const [, setBatSide] = useState<'L' | 'R'>('R');
+  const [gameMode, setGameMode] = useState<GameMode>('wbc');
   const [callHistory, setCallHistory] = useState<Array<{pitch: StrikeoutPitch, userCall: 'strike' | 'ball', correct: boolean}>>([]);
 
   const currentPitch = pitches[currentIndex] ?? null;
 
-  const startGame = useCallback((side: 'L' | 'R', fastballOnly = false) => {
+  const startGame = useCallback((side: 'L' | 'R', mode: GameMode, fastballOnly = false) => {
     setBatSide(side);
-    let filtered = pitchData.filter(p => p.batSide === side);
-    if (fastballOnly) filtered = filtered.filter(p => p.startSpeed >= 93);
+    setGameMode(mode);
+
+    let pool: StrikeoutPitch[];
+    switch (mode) {
+      case 'skubal': pool = skubalPitches; break;
+      case 'skenes': pool = skenesPitches; break;
+      default: pool = wbcPitches; break;
+    }
+
+    let filtered = pool.filter(p => p.batSide === side);
+    if (mode === 'wbc' && fastballOnly) {
+      filtered = filtered.filter(p => p.startSpeed >= 93);
+    }
+
     const selected = selectRandomPitches(filtered, TOTAL_PITCHES);
     setPitches(selected);
     setCallHistory([]);
@@ -107,6 +123,7 @@ export default function App() {
         score={finalScore}
         pitches={pitches}
         callHistory={callHistory}
+        gameMode={gameMode}
         onRestart={() => setPhase('intro')}
       />
     );

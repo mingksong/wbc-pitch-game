@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { StrikeoutPitch } from '../data/korStrikeoutPitches';
+import type { StrikeoutPitch } from '../data/types';
 
 const NUM_POINTS = 50;
 
